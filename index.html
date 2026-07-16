@@ -94,6 +94,10 @@
       background: linear-gradient(180deg, #9ad8ff, #66c2ff);
     }
 
+    #native-vr-button {
+      display: none !important;
+    }
+
     .status {
       position: fixed;
       left: 16px;
@@ -1835,7 +1839,9 @@ VRButton.registerSessionGrantedListener();
     document.body.appendChild(renderer.domElement);
 
     const nativeVrButton = VRButton.createButton(renderer);
-    nativeVrButton.style.display = 'none';
+    nativeVrButton.id = 'native-vr-button';
+    nativeVrButton.setAttribute('aria-hidden', 'true');
+    nativeVrButton.tabIndex = -1;
     document.body.appendChild(nativeVrButton);
 
     const scene = new THREE.Scene();
@@ -2495,6 +2501,10 @@ VRButton.registerSessionGrantedListener();
     }
 
     function enterVr() {
+      if (!navigator.xr) {
+        status.textContent = 'VR | WebXR is not supported on this device';
+        return;
+      }
       nativeVrButton.click();
     }
 
